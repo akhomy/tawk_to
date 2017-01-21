@@ -1,0 +1,15 @@
+# Schema for the configuration files of the tawk_to module.
+
+tawk_to.settings:
+  type: mapping
+  label: 'tawk_to settings'
+  translatable: true
+  mapping:
+    tawk_to_widget_page_id:
+      type: string
+      label: 'tawk_to_widget_page_id'
+      translatable: true
+    tawk_to_widget_widget_id:
+      type: string
+      label: 'tawk_to_widget_widget_id'
+      translatable: true

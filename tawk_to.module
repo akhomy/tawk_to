@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * tawk_to - integration with https://www.tawk.to chat service
+ * Contains main module code.
+ */
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\file\Entity\File;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+use Drupal\tawk_to\Controller\TawkToWidgetController;
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_help
+ * @see hook_help()
+ */
+function tawk_to_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.tawk_to':
+      return t('
+        <h2>http://tawk.to for Drupal 8.</h2>
+        <p>Tawk.to widget cutomization, using this module you can select widget which will be used on every page on your site</p>
+      ');
+  }
+}
+
+/**
+ * Implements hook_page_bottom
+ * Hook for adding widget script to every page.
+ * @see hook_page_bottom()
+ */
+function tawk_to_page_bottom(array &$page_bottom) {
+  $widget = TawkToWidgetController::tawkToGetWidget();
+
+  if ($widget['page_id'] === '' || $widget['widget_id'] === '') {
+    return NULL;
+  }
+
+  $page_id = $widget['page_id'];
+  $widget_id = $widget['widget_id'];
+  $page_bottom['tawk_to_widget'] = array(
+    '#markup' => Markup::create(tawk_to_render_widget($page_id, $widget_id)),
+  );
+}
+
+/**
+ * Creates markup for embed script element.
+ */
+function tawk_to_render_widget($page_id, $widget_id) {
+  return '<!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+  var $_Tawk_API={},$_Tawk_LoadStart=new Date();
+  (function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src="https://embed.tawk.to/' . $page_id . '/' . $widget_id . '";
+  s1.charset="UTF-8";
+  s1.setAttribute("crossorigin","*");
+  s0.parentNode.insertBefore(s1,s0);
+  })();
+  </script>
+  <!--End of Tawk.to Script-->';
+}

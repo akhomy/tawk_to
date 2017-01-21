@@ -1,0 +1,24 @@
+tawk_to.widget:
+  path: '/admin/config/tawk/widget'
+  defaults:
+    _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::content'
+    _title: 'Widget'
+  requirements:
+    _permission: 'administer tawk_to settings'
+    
+    
+tawk_to.set_widget:
+  path: '/admin/config/tawk/setwidget'
+  defaults:
+    _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::setWidget'
+    _title: 'Set Widget'
+  requirements:
+    _permission: 'administer tawk_to settings'   
+    
+tawk_to.remove_widget:
+  path: '/admin/config/tawk/removewidget'
+  defaults:
+    _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::removeWidget'
+    _title: 'Remove Widget'
+  requirements:
+    _permission: 'administer tawk_to settings'

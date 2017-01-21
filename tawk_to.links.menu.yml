@@ -1,0 +1,6 @@
+tawk_to.help:
+  title: 'TawkTo'
+  route_name: tawk_to.widget
+  menu_name: admin
+  parent: system.admin_config
+  weight: 100
