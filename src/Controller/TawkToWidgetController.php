@@ -3,9 +3,6 @@
 namespace Drupal\tawk_to\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Core\Render\Markup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -25,7 +22,6 @@ class TawkToWidgetController extends ControllerBase {
 
   /**
    * Constructs a TawkToWidgetController object.
-   *
    */
   public function __construct(RequestStack $request) {
     $this->request = $request;
@@ -53,7 +49,7 @@ class TawkToWidgetController extends ControllerBase {
    * Retrieves widget details from database.
    */
   public static function tawkToGetWidget() {
-    //Rewrite based on config
+    // Rewrite based on config.
     $config = \Drupal::config('tawk_to.settings');
     return array(
       'page_id' => $config->get('tawk_to_widget_page_id'),
@@ -81,7 +77,7 @@ class TawkToWidgetController extends ControllerBase {
   /**
    * Creates markup for settings page.
    */
-  function tawkToRenderWidgetIframe($baseUrl, $iframeUrl) {
+  public function tawkToRenderWidgetIframe($baseUrl, $iframeUrl) {
     return '<script type="text/javascript" src="' . $baseUrl . '/public/js/jquery-1.11.0.min.js"></script>
 
   <iframe
@@ -150,7 +146,8 @@ class TawkToWidgetController extends ControllerBase {
   }
 
   /**
-   * Callback for set widget via ajax in TawkTo iframe
+   * Callback for set widget via ajax in TawkTo iframe.
+   *
    * @see tawkToRenderWidgetIframe()
    * Our router maps this method to the path 'admin/config/tawk/setwidget'.
    */
@@ -173,7 +170,8 @@ class TawkToWidgetController extends ControllerBase {
   }
 
   /**
-   * Callback for remove widget via ajax in TawkTo iframe
+   * Callback for remove widget via ajax in TawkTo iframe.
+   *
    * @see tawkToRenderWidgetIframe()
    * Our router maps this method to the path 'admin/config/tawk/removewidget'.
    */
