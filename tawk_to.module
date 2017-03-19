@@ -37,29 +37,32 @@ function tawk_to_page_bottom(array &$page_bottom) {
   if ($widget['page_id'] === '' || $widget['widget_id'] === '') {
     return NULL;
   }
-
-  $page_id = $widget['page_id'];
-  $widget_id = $widget['widget_id'];
-  $page_bottom['tawk_to_widget'] = array(
-    '#markup' => Markup::create(tawk_to_render_widget($page_id, $widget_id)),
-  );
+  $is_admin = \Drupal::service('router.admin_context')->isAdminRoute();
+  // Disable widget for admin pages.
+  if(!$is_admin){
+    $page_id = $widget['page_id'];
+    $widget_id = $widget['widget_id'];
+    $items = array();
+    $items['page_id'] = $widget['page_id'];
+    $items['widget_id'] = $widget['widget_id'];
+    $page_bottom['tawk_to_widget'] = array('#theme' => 'tawk_to', '#items' => $items);
+  }
 }
 
 /**
- * Creates markup for embed script element.
+ * Implements hook_theme().
  */
-function tawk_to_render_widget($page_id, $widget_id) {
-  return '<!--Start of Tawk.to Script-->
-  <script type="text/javascript">
-  var $_Tawk_API={},$_Tawk_LoadStart=new Date();
-  (function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src="https://embed.tawk.to/' . $page_id . '/' . $widget_id . '";
-  s1.charset="UTF-8";
-  s1.setAttribute("crossorigin","*");
-  s0.parentNode.insertBefore(s1,s0);
-  })();
-  </script>
-  <!--End of Tawk.to Script-->';
+function tawk_to_theme($existing, $type, $theme, $path) {
+  return array(
+    'tawk_to' => array(
+      'variables' => array(
+        'items' => array(),
+      )
+    ),
+    'tawk_to_iframe' => array(
+      'variables' => array(
+        'items' => array(),
+      )
+    ),
+  );
 }

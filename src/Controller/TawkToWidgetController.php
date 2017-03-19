@@ -75,74 +75,15 @@ class TawkToWidgetController extends ControllerBase {
   }
 
   /**
-   * Creates markup for settings page.
-   */
-  public function tawkToRenderWidgetIframe($baseUrl, $iframeUrl) {
-    return '<script type="text/javascript" src="' . $baseUrl . '/public/js/jquery-1.11.0.min.js"></script>
-
-  <iframe
-      id="tawkIframe"
-      src=""
-      style="min-height: 400px; width : 100%; border: none">
-  </iframe>
-
-  <script type="text/javascript">
-      var currentHost = window.location.protocol + "//" + window.location.host;
-      var url = "' . $iframeUrl . '&parentDomain=" + currentHost;
-
-      jQuery("#tawkIframe").attr("src", url);
-
-      var iframe = jQuery("#tawk_widget_customization")[0];
-
-      window.addEventListener("message", function(e) {
-          if(e.origin === "' . $baseUrl . '") {
-
-              if(e.data.action === "setWidget") {
-                  setWidget(e);
-              }
-
-              if(e.data.action === "removeWidget") {
-                  removeWidget(e);
-              }
-          }
-      });
-
-      function setWidget(e) {
-          jQuery.post("/admin/config/tawk/setwidget", {
-              pageId : e.data.pageId,
-              widgetId : e.data.widgetId
-          }, function(r) {
-              if(r.success) {
-                  e.source.postMessage({action: "setDone"}, "' . $baseUrl . '");
-              } else {
-                  e.source.postMessage({action: "setFail"}, "' . $baseUrl . '");
-              }
-          });
-      }
-
-      function removeWidget(e) {
-          jQuery.post("/admin/config/tawk/removewidget", function(r) {
-              if(r.success) {
-                  e.source.postMessage({action: "removeDone"}, "' . $baseUrl . '");
-              } else {
-                  e.source.postMessage({action: "removeFail"}, "' . $baseUrl . '");
-              }
-          });
-      }
-  </script>';
-  }
-
-  /**
    * Constructs a page with descriptive content.
    *
    * Our router maps this method to the path 'admin/config/tawk/widget'.
    */
   public function content() {
-    $baseUrl = $this->tawkToGetBaseUrl();
-    $iframeUrl = $this->tawkToGetIframeUrl();
-    return array(
-      '#markup' => Markup::create($this->tawkToRenderWidgetIframe($baseUrl, $iframeUrl)),
-    );
+    $items = array();
+    $items['baseUrl'] = $this->tawkToGetBaseUrl();
+    $items['iframeUrl'] = $this->tawkToGetIframeUrl();
+    return array('#theme' => 'tawk_to_iframe', '#items' => $items);
   }
 
   /**
