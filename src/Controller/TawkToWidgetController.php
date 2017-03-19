@@ -3,7 +3,6 @@
 namespace Drupal\tawk_to\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Render\Markup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
