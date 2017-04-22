@@ -37,9 +37,10 @@ function tawk_to_page_bottom(array &$page_bottom) {
   if ($widget['page_id'] === '' || $widget['widget_id'] === '') {
     return NULL;
   }
-  $is_admin = \Drupal::service('router.admin_context')->isAdminRoute();
+  $is_admin_page = \Drupal::service('router.admin_context')->isAdminRoute();
+  $check_access = \Drupal::currentUser()->hasPermission('access tawk_to widget');
   // Disable widget for admin pages.
-  if(!$is_admin){
+  if(!$is_admin_page && $check_access){
     $page_id = $widget['page_id'];
     $widget_id = $widget['widget_id'];
     $items = array();
