@@ -1,22 +1,36 @@
-tawk_to drupal 8 port
-=======================
-## REQUIREMENTS ##
+# CONTENTS OF THIS FILE
+  
+ * Introduction
+ * Requirements
+ * Installation
+ * Configuration
+ * Maintainers
+ 
+## Introduction
 
-- Account on tawk.to service
+Tawk.to widget customization, with using this module you can select widget, 
+that will appear on every non-admin site page.
 
-What Is This?
--------------
+## Requirements
 
-Tawk.to widget cutomization, using this module you can select widget which will be used on every page on your site
+- Account on [tawk.to](tawk.to) service
 
-### How To Use The Tawk.to
------------------------
-These are the steps you need to take in order to use this software. Order is
-important.
+## Installation
 
-1. Download tawk_to.
-2. Install module.
-3. Go to module setting page `admin/config/tawk/widget`, login into tawk.to with credentials.
-4. Select widget and widget settings.
-5. Set up permissions `Access tawk_to widget`.
-6. Check after site page load tawk.to widget on page.
+Download and enable as a normal module.
+
+## Configuration
+
+* Go to module setting page `admin/config/tawk/widget`, login into tawk.to 
+with credentials.
+* Select widget and widget settings.
+* Set up permissions `Access tawk_to widget`.
+* Check that widget is loaded on some non-admin site page.
+
+## Uninstalling:
+
+Uninstall as a normal module.
+
+## Maintainers
+
+- Andriy Khomych(andriy.khomych) https://www.drupal.org/u/andriy-khomych

@@ -1,7 +1,5 @@
 name: Tawk.to chat
 type: module
-description: 'Provides base intergraton with tawk.to service. Based on drupal 7 version'
-version: 8.x
+description: 'Provides base intergraton with tawk.to service.'
 core: 8.x
 configure: tawk_to.widget
-hidden: false

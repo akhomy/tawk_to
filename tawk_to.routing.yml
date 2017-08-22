@@ -6,7 +6,6 @@ tawk_to.widget:
   requirements:
     _permission: 'administer tawk_to settings'
     
-    
 tawk_to.set_widget:
   path: '/admin/config/tawk/setwidget'
   defaults:

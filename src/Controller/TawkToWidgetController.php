@@ -6,120 +6,122 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Controller routines for page example routes.
+ * Controller routine that manages tawk.to widget settings.
  */
 class TawkToWidgetController extends ControllerBase {
 
   /**
    * Request stack.
    *
-   * @var RequestStack
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
   public $request;
 
   /**
-   * Constructs a TawkToWidgetController object.
+   * The settings config.
+   *
+   * @var \Drupal\Core\Config\Config
    */
-  public function __construct(RequestStack $request) {
+  public $config;
+
+  /**
+   * Constructs a TawkToWidgetController object.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   The request stack.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   *   The configuration factory service.
+   */
+  public function __construct(RequestStack $request, ConfigFactoryInterface $config) {
     $this->request = $request;
+    $this->config = $config->getEditable('tawk_to.settings');
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    // Instantiates this form class.
     return new static(
-        // Load the service required to construct this class.
-        $container->get('request_stack')
+        $container->get('request_stack'), $container->get('config.factory')
     );
   }
 
   /**
    * Base url for tawk.to application which serves iframe.
+   *
+   * @return string
+   *   Tawk.to plugins URL.
    */
   private function tawkToGetBaseUrl() {
     return 'https://plugins.tawk.to';
   }
 
   /**
-   * Retrieves widget details from database.
-   */
-  public static function tawkToGetWidget() {
-    // Rewrite based on config.
-    $config = \Drupal::config('tawk_to.settings');
-    return array(
-      'page_id' => $config->get('tawk_to_widget_page_id'),
-      'widget_id' => $config->get('tawk_to_widget_widget_id'),
-    );
-  }
-
-  /**
    * Constructs url for configuration iframe.
+   *
+   * @return string
+   *   Base iframe URL.
    */
   private function tawkToGetIframeUrl() {
-
-    $widget = TawkToWidgetController::tawkToGetWidget();
-
-    if (!$widget) {
-      $widget = array(
-        'page_id' => '',
-        'widget_id' => '',
-      );
-    }
-
-    return $this->tawkToGetBaseUrl() . '/generic/widgets?currentWidgetId=' . $widget['widget_id'] . '&currentPageId=' . $widget['page_id'];
+    $page_id = $this->config->get('tawk_to_widget_page_id');
+    $widget_id = $this->config->get('tawk_to_widget_widget_id');
+    return $this->tawkToGetBaseUrl() . '/generic/widgets?currentWidgetId=' . $widget_id . '&currentPageId=' . $page_id;
   }
 
   /**
    * Constructs a page with descriptive content.
    *
-   * Our router maps this method to the path 'admin/config/tawk/widget'.
+   * @return array
+   *   Renderable array.
    */
   public function content() {
-    $items = array();
+    $items = [];
     $items['baseUrl'] = $this->tawkToGetBaseUrl();
     $items['iframeUrl'] = $this->tawkToGetIframeUrl();
-    return array('#theme' => 'tawk_to_iframe', '#items' => $items);
+    return ['#theme' => 'tawk_to_iframe', '#items' => $items];
   }
 
   /**
-   * Callback for set widget via ajax in TawkTo iframe.
+   * Callback for settting widget with ajax in tawk.to iframe.
    *
-   * @see tawkToRenderWidgetIframe()
-   * Our router maps this method to the path 'admin/config/tawk/setwidget'.
+   * @param string $pageId
+   *   The page id.
+   * @param string $widgetId
+   *   The widget id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   JSON object for JS code.
    */
   public function setWidget($pageId = NULL, $widgetId = NULL) {
     $pageId = $this->request->getCurrentRequest()->get('pageId');
     $widgetId = $this->request->getCurrentRequest()->get('widgetId');
 
     if (!$pageId || !$widgetId) {
-      return new JsonResponse(array('success' => FALSE));
+      return new JsonResponse(['success' => FALSE]);
     }
 
     if (preg_match('/^[0-9A-Fa-f]{24}$/', $pageId) !== 1 || preg_match('/^[a-z0-9]{1,50}$/i', $widgetId) !== 1) {
-      return new JsonResponse(array('success' => FALSE));
+      return new JsonResponse(['success' => FALSE]);
     }
-    $config = \Drupal::configFactory()->getEditable('tawk_to.settings');
-    $config->set('tawk_to_widget_page_id', $pageId)->save();
-    $config->set('tawk_to_widget_widget_id', $widgetId)->save();
+    $this->config->set('tawk_to_widget_page_id', $pageId)->save();
+    $this->config->set('tawk_to_widget_widget_id', $widgetId)->save();
 
-    return new JsonResponse(array('success' => TRUE));
+    return new JsonResponse(['success' => TRUE]);
   }
 
   /**
-   * Callback for remove widget via ajax in TawkTo iframe.
+   * Callback for removing widget with ajax in tawk.to iframe.
    *
-   * @see tawkToRenderWidgetIframe()
-   * Our router maps this method to the path 'admin/config/tawk/removewidget'.
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   JSON object for JS code.
    */
   public function removeWidget() {
-    $config = \Drupal::configFactory()->getEditable('tawk_to.settings');
-    $config->clear('tawk_to_widget_page_id')->save();
-    $config->clear('tawk_to_widget_widget_id')->save();
-    return new JsonResponse(array('success' => TRUE));
+    $this->config->clear('tawk_to_widget_page_id')->save();
+    $this->config->clear('tawk_to_widget_widget_id')->save();
+    return new JsonResponse(['success' => TRUE]);
   }
 
 }
