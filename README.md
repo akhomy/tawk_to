@@ -9,7 +9,7 @@
 ## Introduction
 
 Tawk.to widget customization, with using this module you can select widget, 
-that will appear on every non-admin site page.
+that will appear on specific site pages.
 
 ## Requirements
 
@@ -21,11 +21,12 @@ Download and enable as a normal module.
 
 ## Configuration
 
-* Go to module setting page `admin/config/tawk/widget`, login into tawk.to 
+* Go to the module settings page `admin/config/tawk_to/widget`, login into tawk.to 
 with credentials.
 * Select widget and widget settings.
-* Set up permissions `Access tawk_to widget`.
-* Check that widget is loaded on some non-admin site page.
+* Go to the module extra settings page `admin/config/tawk_to/exta_settings`,
+set up if necessary visibility settings.
+* Check that widget is loaded on some site pages.
 
 ## Uninstalling:
 
