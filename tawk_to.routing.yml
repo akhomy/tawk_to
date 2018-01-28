@@ -1,23 +1,39 @@
-tawk_to.widget:
-  path: '/admin/config/tawk/widget'
+tawk_to.index:
+  path: '/admin/config/tawk_to'
   defaults:
-    _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::content'
-    _title: 'Widget'
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Tawk.to'
   requirements:
     _permission: 'administer tawk_to settings'
-    
+
+tawk_to.widget:
+  path: '/admin/config/tawk_to/widget'
+  defaults:
+    _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::content'
+    _title: 'Tawk.to - Widget'
+  requirements:
+    _permission: 'administer tawk_to settings'
+
 tawk_to.set_widget:
-  path: '/admin/config/tawk/setwidget'
+  path: '/admin/config/tawk_to/setwidget'
   defaults:
     _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::setWidget'
-    _title: 'Set Widget'
+    _title: 'Tawk.to - Set Widget'
   requirements:
     _permission: 'administer tawk_to settings'   
-    
+
 tawk_to.remove_widget:
-  path: '/admin/config/tawk/removewidget'
+  path: '/admin/config/tawk_to/removewidget'
   defaults:
     _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::removeWidget'
-    _title: 'Remove Widget'
+    _title: 'Tawk.to - Remove Widget'
+  requirements:
+    _permission: 'administer tawk_to settings'
+
+tawk_to.extra_settings:
+  path: '/admin/config/tawk_to/exta_settings'
+  defaults:
+    _form: 'Drupal\tawk_to\Form\TawkToExtraSettingsForm'
+    _title: 'Tawk.to - Extra Settings'
   requirements:
     _permission: 'administer tawk_to settings'

@@ -1,6 +1,3 @@
 administer tawk_to settings:
   title: 'Administer tawk.to module permissions'
   restrict access: true
-access tawk_to widget:
-  title: 'Access tawk_to widget'
-  restrict access: true  

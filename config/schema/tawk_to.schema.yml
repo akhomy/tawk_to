@@ -8,3 +8,9 @@ tawk_to.settings:
     tawk_to_widget_widget_id:
       type: string
       label: 'tawk_to_widget_widget_id'
+    visibility:
+      type: sequence
+      label: 'Visibility Conditions'
+      sequence:
+        type: condition.plugin.[id]
+        label: 'Visibility Condition'

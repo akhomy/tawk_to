@@ -4,19 +4,3 @@
  * @file
  * Contains install/uninstall functionality of module.
  */
-
-/**
- * Implements hook_install().
- */
-function tawk_to_install() {
-  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, ['access tawk_to widget']);
-}
-
-/**
- * Implements hook_update_N().
- *
- * Trigger entity update for changes in entity schema.
- */
-function tawk_to_update_8011(&$sandbox) {
-  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, ['access tawk_to widget']);
-}

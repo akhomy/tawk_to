@@ -1,6 +1,19 @@
-tawk_to.help:
+tawk_to.index:
   title: 'Tawk.to'
-  route_name: tawk_to.widget
+  route_name: tawk_to.index
   menu_name: admin
   parent: system.admin_config
   weight: 100
+
+tawk_to.widget:
+  title: 'Tawk.to - Widget Settings'
+  route_name: tawk_to.widget
+  menu_name: admin
+  parent: tawk_to.index
+  weight: 1
+
+tawk_to.extra_settings:
+  title: 'Tawk.to - Extra Settings'
+  parent: tawk_to.index
+  route_name: tawk_to.extra_settings
+  weight: 2

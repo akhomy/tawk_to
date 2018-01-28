@@ -1,0 +1,4 @@
+services:
+  tawk_to.access_control_handler:
+    class: Drupal\tawk_to\Service\TawkToAccessControlHandler
+    arguments: ['@config.factory', '@plugin.manager.condition']

@@ -35,14 +35,14 @@ function tawk_to_page_bottom(array &$page_bottom) {
   if ($page_id === '' || $widget_id === '') {
     return NULL;
   }
-  $is_admin_page = \Drupal::service('router.admin_context')->isAdminRoute();
-  $check_access = \Drupal::currentUser()->hasPermission('access tawk_to widget');
-  // Disable widget for admin pages.
-  if (!$is_admin_page && $check_access) {
+  if (\Drupal::service('tawk_to.access_control_handler')->checkAccess()) {
     $items = [];
     $items['page_id'] = $page_id;
     $items['widget_id'] = $widget_id;
     $page_bottom['tawk_to_widget'] = ['#theme' => 'tawk_to', '#items' => $items];
+  }
+  else {
+    return NULL;
   }
 }
 
