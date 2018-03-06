@@ -5,19 +5,17 @@
  * Contains main module code.
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
-
 /**
  * Implements hook_help().
  *
  * @see hook_help()
  */
-function tawk_to_help($route_name, RouteMatchInterface $route_match) {
+function tawk_to_help($route_name) {
   switch ($route_name) {
     case 'help.page.tawk_to':
       return t('
-        <h2>http://tawk.to for Drupal 8.</h2>
-        <p>Tawk.to widget cutomization, using this module you can select widget which will be used on every page on your site</p>
+        <h2><a href="http://tawk.to">Tawk.to</a> widget for Drupal 8.</h2>
+        <p>Tawk.to widget cutomization, using this module you can select widget which will be used on specific site pages.</p>
       ');
   }
 }
@@ -30,26 +28,13 @@ function tawk_to_help($route_name, RouteMatchInterface $route_match) {
  * @see hook_page_bottom()
  */
 function tawk_to_page_bottom(array &$page_bottom) {
-  $page_id = \Drupal::config('tawk_to.settings')->get('tawk_to_widget_page_id');
-  $widget_id = \Drupal::config('tawk_to.settings')->get('tawk_to_widget_widget_id');
-  if ($page_id === '' || $widget_id === '') {
-    return NULL;
-  }
-  if (\Drupal::service('tawk_to.access_control_handler')->checkAccess()) {
-    $items = [];
-    $items['page_id'] = $page_id;
-    $items['widget_id'] = $widget_id;
-    $page_bottom['tawk_to_widget'] = ['#theme' => 'tawk_to', '#items' => $items];
-  }
-  else {
-    return NULL;
-  }
+  $page_bottom['tawk_to_widget'] = \Drupal::service('tawk_to.embed_render')->render();
 }
 
 /**
  * Implements hook_theme().
  */
-function tawk_to_theme($existing, $type, $theme, $path) {
+function tawk_to_theme() {
   return [
     'tawk_to' => [
       'variables' => [

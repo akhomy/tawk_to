@@ -1,49 +1,49 @@
 <script type="text/javascript" src="{{ items.baseUrl|raw }}/public/js/jquery-1.11.0.min.js"></script>
 
-  <iframe id="tawkIframe" src="" style="min-height: 400px; width : 100%; border: none">
-  </iframe>
+<iframe id="tawkIframe" src="" style="min-height: 400px; width : 100%; border: none">
+</iframe>
 
-  <script type="text/javascript">
-      var currentHost = window.location.protocol + "//" + window.location.host;
-      var url = "{{ items.iframeUrl|raw }}&parentDomain=" + currentHost;
+<script type="text/javascript">
+  var currentHost = window.location.protocol + "//" + window.location.host;
+  var url = "{{ items.iframeUrl|raw }}&parentDomain=" + currentHost;
 
-      jQuery("#tawkIframe").attr("src", url);
+  jQuery("#tawkIframe").attr("src", url);
 
-      var iframe = jQuery("#tawk_widget_customization")[0];
+  var iframe = jQuery("#tawk_widget_customization")[0];
 
-      window.addEventListener("message", function(e) {
-          if(e.origin === "{{ items.baseUrl|raw }}") {
+  window.addEventListener("message", function (e) {
+    if (e.origin === "{{ items.baseUrl|raw }}") {
 
-              if(e.data.action === "setWidget") {
-                  setWidget(e);
-              }
-
-              if(e.data.action === "removeWidget") {
-                  removeWidget(e);
-              }
-          }
-      });
-
-      function setWidget(e) {
-          jQuery.post("/admin/config/tawk_to/setwidget", {
-              pageId : e.data.pageId,
-              widgetId : e.data.widgetId
-          }, function(r) {
-              if(r.success) {
-                  e.source.postMessage({action: "setDone"}, "{{ items.baseUrl|raw }}");
-              } else {
-                  e.source.postMessage({action: "setFail"}, "{{ items.baseUrl|raw }}");
-              }
-          });
+      if (e.data.action === "setWidget") {
+        setWidget(e);
       }
 
-      function removeWidget(e) {
-          jQuery.post("/admin/config/tawk_to/removewidget", function(r) {
-              if(r.success) {
-                  e.source.postMessage({action: "removeDone"}, "{{ items.baseUrl|raw }}");
-              } else {
-                  e.source.postMessage({action: "removeFail"}, "{{ items.baseUrl|raw }}");
-              }
-          });
+      if (e.data.action === "removeWidget") {
+        removeWidget(e);
       }
-  </script>
+    }
+  });
+
+  function setWidget(e) {
+    jQuery.post("/admin/config/tawk_to/setwidget", {
+      pageId: e.data.pageId,
+      widgetId: e.data.widgetId
+    }, function (r) {
+      if (r.success) {
+        e.source.postMessage({action: "setDone"}, "{{ items.baseUrl|raw }}");
+      } else {
+        e.source.postMessage({action: "setFail"}, "{{ items.baseUrl|raw }}");
+      }
+    });
+  }
+
+  function removeWidget(e) {
+    jQuery.post("/admin/config/tawk_to/removewidget", function (r) {
+      if (r.success) {
+        e.source.postMessage({action: "removeDone"}, "{{ items.baseUrl|raw }}");
+      } else {
+        e.source.postMessage({action: "removeFail"}, "{{ items.baseUrl|raw }}");
+      }
+    });
+  }
+</script>

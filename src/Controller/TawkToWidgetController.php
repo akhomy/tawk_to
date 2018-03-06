@@ -14,7 +14,12 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 class TawkToWidgetController extends ControllerBase {
 
   /**
-   * Request stack.
+   * The tawk.to plugins URL.
+   */
+  const TAWK_TO_PLUGINS_URL = 'https://plugins.tawk.to';
+
+  /**
+   * The request stack.
    *
    * @var \Symfony\Component\HttpFoundation\RequestStack
    */
@@ -45,18 +50,9 @@ class TawkToWidgetController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-        $container->get('request_stack'), $container->get('config.factory')
+        $container->get('request_stack'),
+        $container->get('config.factory')
     );
-  }
-
-  /**
-   * Base url for tawk.to application which serves iframe.
-   *
-   * @return string
-   *   Tawk.to plugins URL.
-   */
-  private function tawkToGetBaseUrl() {
-    return 'https://plugins.tawk.to';
   }
 
   /**
@@ -66,20 +62,20 @@ class TawkToWidgetController extends ControllerBase {
    *   Base iframe URL.
    */
   private function tawkToGetIframeUrl() {
-    $page_id = $this->config->get('tawk_to_widget_page_id');
-    $widget_id = $this->config->get('tawk_to_widget_widget_id');
-    return $this->tawkToGetBaseUrl() . '/generic/widgets?currentWidgetId=' . $widget_id . '&currentPageId=' . $page_id;
+    $pageId = $this->config->get('tawk_to_widget_page_id');
+    $widgetId = $this->config->get('tawk_to_widget_id');
+    return self::TAWK_TO_PLUGINS_URL . '/generic/widgets?currentWidgetId=' . $widgetId . '&currentPageId=' . $pageId;
   }
 
   /**
-   * Constructs a page with descriptive content.
+   * Constructs a widgets content.
    *
    * @return array
    *   Renderable array.
    */
-  public function content() {
+  public function widgetsContent() {
     $items = [];
-    $items['baseUrl'] = $this->tawkToGetBaseUrl();
+    $items['baseUrl'] = self::TAWK_TO_PLUGINS_URL;
     $items['iframeUrl'] = $this->tawkToGetIframeUrl();
     return ['#theme' => 'tawk_to_iframe', '#items' => $items];
   }
@@ -87,15 +83,10 @@ class TawkToWidgetController extends ControllerBase {
   /**
    * Callback for settting widget with ajax in tawk.to iframe.
    *
-   * @param string $pageId
-   *   The page id.
-   * @param string $widgetId
-   *   The widget id.
-   *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   JSON object for JS code.
    */
-  public function setWidget($pageId = NULL, $widgetId = NULL) {
+  public function setWidget() {
     $pageId = $this->request->getCurrentRequest()->get('pageId');
     $widgetId = $this->request->getCurrentRequest()->get('widgetId');
 
@@ -107,7 +98,7 @@ class TawkToWidgetController extends ControllerBase {
       return new JsonResponse(['success' => FALSE]);
     }
     $this->config->set('tawk_to_widget_page_id', $pageId)->save();
-    $this->config->set('tawk_to_widget_widget_id', $widgetId)->save();
+    $this->config->set('tawk_to_widget_id', $widgetId)->save();
 
     return new JsonResponse(['success' => TRUE]);
   }
@@ -120,7 +111,7 @@ class TawkToWidgetController extends ControllerBase {
    */
   public function removeWidget() {
     $this->config->clear('tawk_to_widget_page_id')->save();
-    $this->config->clear('tawk_to_widget_widget_id')->save();
+    $this->config->clear('tawk_to_widget_id')->save();
     return new JsonResponse(['success' => TRUE]);
   }
 

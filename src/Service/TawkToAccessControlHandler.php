@@ -48,19 +48,19 @@ class TawkToAccessControlHandler {
   /**
    * Constructs the tawk.to access control handler instance.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Plugin\Context\ContextHandlerInterface $context_handler
+   * @param \Drupal\Core\Plugin\Context\ContextHandlerInterface $contextHandler
    *   The ContextHandler for applying contexts to conditions properly.
-   * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $context_repository
+   * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $contextRepository
    *   The lazy context repository service.
    * @param \Drupal\Core\Executable\ExecutableManagerInterface $manager
    *   The ConditionManager for building the visibility UI.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ContextHandlerInterface $context_handler, ContextRepositoryInterface $context_repository, ExecutableManagerInterface $manager) {
-    $this->tawkToVisibility = $config_factory->get('tawk_to.settings')->get('visibility');
-    $this->contextHandler = $context_handler;
-    $this->contextRepository = $context_repository;
+  public function __construct(ConfigFactoryInterface $configFactory, ContextHandlerInterface $contextHandler, ContextRepositoryInterface $contextRepository, ExecutableManagerInterface $manager) {
+    $this->tawkToVisibility = $configFactory->get('tawk_to.settings')->get('visibility');
+    $this->contextHandler = $contextHandler;
+    $this->contextRepository = $contextRepository;
     $this->manager = $manager;
   }
 
@@ -69,25 +69,25 @@ class TawkToAccessControlHandler {
    */
   public function checkAccess() {
     $conditions = [];
-    $missing_context = FALSE;
+    $missingContext = FALSE;
     if (!empty($this->tawkToVisibility)) {
-      foreach ($this->tawkToVisibility as $condition_id => $configuration) {
-        $condition = $this->manager->createInstance($condition_id, $configuration);
+      foreach ($this->tawkToVisibility as $conditionId => $configuration) {
+        $condition = $this->manager->createInstance($conditionId, $configuration);
         if ($condition instanceof ContextAwarePluginInterface) {
           try {
-            $context_mapping = $condition->getContextMapping();
-            if ($context_mapping) {
-              $contexts = $this->contextRepository->getRuntimeContexts(array_values($context_mapping));
+            $contextMapping = $condition->getContextMapping();
+            if ($contextMapping) {
+              $contexts = $this->contextRepository->getRuntimeContexts(array_values($contextMapping));
               $this->contextHandler->applyContextMapping($condition, $contexts);
             }
           }
           catch (ContextException $e) {
-            $missing_context = TRUE;
+            $missingContext = TRUE;
           }
         }
-        $conditions[$condition_id] = $condition;
+        $conditions[$conditionId] = $condition;
       }
-      if ($missing_context) {
+      if ($missingContext) {
         return FALSE;
       }
       return $this->resolveConditions($conditions, 'and');

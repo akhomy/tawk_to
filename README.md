@@ -21,8 +21,8 @@ Download and enable as a normal module.
 
 ## Configuration
 
-* Go to the module settings page `admin/config/tawk_to/widget`, login into tawk.to 
-with credentials.
+* Go to the module settings page `admin/config/tawk_to/widget`,
+login into tawk.to with credentials.
 * Select widget and widget settings.
 * Go to the module extra settings page `admin/config/tawk_to/exta_settings`,
 set up if necessary visibility settings.

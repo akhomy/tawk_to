@@ -44,19 +44,19 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
   /**
    * Constructs a TawkToExtraSettingsForm object.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The factory for configuration objects.
    * @param \Drupal\Core\Executable\ExecutableManagerInterface $manager
    *   The ConditionManager for building the visibility UI.
-   * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $context_repository
+   * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $contextRepository
    *   The lazy context repository service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language
    *   The language manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ExecutableManagerInterface $manager, ContextRepositoryInterface $context_repository, LanguageManagerInterface $language) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $configFactory, ExecutableManagerInterface $manager, ContextRepositoryInterface $contextRepository, LanguageManagerInterface $language) {
+    parent::__construct($configFactory);
     $this->manager = $manager;
-    $this->contextRepository = $context_repository;
+    $this->contextRepository = $contextRepository;
     $this->language = $language;
   }
 
@@ -189,13 +189,13 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
       $condition = $form_state->get(['conditions', $condition_id]);
       $condition->submitConfigurationForm($form['visibility'][$condition_id], SubformState::createForSubform($form['visibility'][$condition_id], $form, $form_state));
       if ($condition instanceof ContextAwarePluginInterface) {
-        $context_mapping = isset($values['context_mapping']) ? $values['context_mapping'] : [];
-        $condition->setContextMapping($context_mapping);
+        $contextMapping = isset($values['context_mapping']) ? $values['context_mapping'] : [];
+        $condition->setContextMapping($contextMapping);
       }
 
-      $condition_configuration = $condition->getConfiguration();
+      $conditionConfiguration = $condition->getConfiguration();
       // Save the visibility conditions to config.
-      $visibility[$condition_id] = $condition_configuration;
+      $visibility[$condition_id] = $conditionConfiguration;
     }
     $this->config('tawk_to.settings')->set('visibility', $visibility)->save();
   }
@@ -218,16 +218,16 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    */
   protected function validateVisibility(array $form, FormStateInterface $form_state) {
     // Validate visibility condition settings.
-    foreach ($form_state->getValue('visibility') as $condition_id => $values) {
+    foreach ($form_state->getValue('visibility') as $conditionId => $values) {
       // All condition plugins use 'negate' as a Boolean in their schema.
       // However, certain form elements may return it as 0/1. Cast here to
       // ensure the data is in the expected type.
       if (array_key_exists('negate', $values)) {
-        $form_state->setValue(['visibility', $condition_id, 'negate'], (bool) $values['negate']);
+        $form_state->setValue(['visibility', $conditionId, 'negate'], (bool) $values['negate']);
       }
       // Allow the condition to validate the form.
-      $condition = $form_state->get(['conditions', $condition_id]);
-      $condition->validateConfigurationForm($form['visibility'][$condition_id], SubformState::createForSubform($form['visibility'][$condition_id], $form, $form_state));
+      $condition = $form_state->get(['conditions', $conditionId]);
+      $condition->validateConfigurationForm($form['visibility'][$conditionId], SubformState::createForSubform($form['visibility'][$conditionId], $form, $form_state));
     }
   }
 

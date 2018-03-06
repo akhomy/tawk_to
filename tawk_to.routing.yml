@@ -9,7 +9,7 @@ tawk_to.index:
 tawk_to.widget:
   path: '/admin/config/tawk_to/widget'
   defaults:
-    _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::content'
+    _controller: '\Drupal\tawk_to\Controller\TawkToWidgetController::widgetsContent'
     _title: 'Tawk.to - Widget'
   requirements:
     _permission: 'administer tawk_to settings'

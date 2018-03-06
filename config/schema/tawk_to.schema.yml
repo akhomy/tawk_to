@@ -5,9 +5,9 @@ tawk_to.settings:
     tawk_to_widget_page_id:
       type: string
       label: 'tawk_to_widget_page_id'
-    tawk_to_widget_widget_id:
+    tawk_to_widget_id:
       type: string
-      label: 'tawk_to_widget_widget_id'
+      label: 'tawk_to_widget_id'
     visibility:
       type: sequence
       label: 'Visibility Conditions'
