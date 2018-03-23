@@ -118,6 +118,10 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
     ];
     $visibility = $this->config('tawk_to.settings')->get('visibility');
     foreach ($this->manager->getDefinitionsForContexts($form_state->getTemporaryValue('gathered_contexts')) as $condition_id => $definition) {
+      // Don't display the ctools webform condition, causes problems.
+      if ($condition_id == 'entity_bundle:webform_submission') {
+        continue;
+      }
       // Don't display the current theme condition.
       if ($condition_id == 'current_theme') {
         continue;
