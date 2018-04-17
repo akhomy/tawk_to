@@ -1,4 +1,5 @@
-# CONTENTS OF THIS FILE
+CONTENTS OF THIS FILE
+---------------------
   
  * Introduction
  * Requirements
@@ -6,20 +7,25 @@
  * Configuration
  * Maintainers
  
-## Introduction
+INTRODUCTION
+---------------------
 
-Tawk.to widget customization, with using this module you can select widget, 
-that will appear on specific site pages.
+Implementation of tawk.to live chat for Drupal 8.
+With using this module you can select widget, that will appear on specific
+site pages.
 
-## Requirements
+REQUIREMENTS
+---------------------
 
 - Account on [tawk.to](tawk.to) service
 
-## Installation
+INSTALLATION
+---------------------
 
 Download and enable as a normal module.
 
-## Configuration
+CONFIGURATION
+-------------
 
 * Go to the module settings page `admin/config/tawk_to/widget`,
 login into tawk.to with credentials.
@@ -28,10 +34,9 @@ login into tawk.to with credentials.
 set up if necessary visibility settings.
 * Check that widget is loaded on some site pages.
 
-## Uninstalling:
+MAINTAINERS
+-----------
 
-Uninstall as a normal module.
+Current maintainers:
+* Andriy Khomych(andriy.khomych) - https://www.drupal.org/u/andriy-khomych
 
-## Maintainers
-
-- Andriy Khomych(andriy.khomych) https://www.drupal.org/u/andriy-khomych
