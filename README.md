@@ -39,4 +39,3 @@ MAINTAINERS
 
 Current maintainers:
 * Andriy Khomych(andriy.khomych) - https://www.drupal.org/u/andriy-khomych
-
