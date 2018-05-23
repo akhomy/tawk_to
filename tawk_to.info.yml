@@ -2,4 +2,4 @@ name: Tawk.to chat
 type: module
 description: 'Provides base intergraton with tawk.to service.'
 core: 8.x
-configure: tawk_to.widget
+configure: tawk_to.index

@@ -25,7 +25,7 @@
   });
 
   function setWidget(e) {
-    jQuery.post("/admin/config/tawk_to/setwidget", {
+    jQuery.post("/admin/config/services/tawk_to/setwidget", {
       pageId: e.data.pageId,
       widgetId: e.data.widgetId
     }, function (r) {
@@ -38,7 +38,7 @@
   }
 
   function removeWidget(e) {
-    jQuery.post("/admin/config/tawk_to/removewidget", function (r) {
+    jQuery.post("/admin/config/services/tawk_to/removewidget", function (r) {
       if (r.success) {
         e.source.postMessage({action: "removeDone"}, "{{ items.baseUrl|raw }}");
       } else {

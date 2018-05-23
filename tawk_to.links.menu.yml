@@ -2,8 +2,7 @@ tawk_to.index:
   title: 'Tawk.to'
   route_name: tawk_to.index
   menu_name: admin
-  parent: system.admin_config
-  weight: 100
+  parent: system.admin_config_services
 
 tawk_to.widget:
   title: 'Tawk.to - Widget Settings'
