@@ -82,13 +82,10 @@ class TawkToAccessControlHandler {
             }
           }
           catch (ContextException $e) {
-            $missingContext = TRUE;
+            //@todo: Think the best way to handle this.
           }
         }
         $conditions[$conditionId] = $condition;
-      }
-      if ($missingContext) {
-        return FALSE;
       }
       return $this->resolveConditions($conditions, 'and');
     }
