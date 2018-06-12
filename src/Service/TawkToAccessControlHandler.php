@@ -82,7 +82,7 @@ class TawkToAccessControlHandler {
             }
           }
           catch (ContextException $e) {
-            //@todo: Think the best way to handle this.
+            // @todo: Think the best way to handle this.
           }
         }
         $conditions[$conditionId] = $condition;
