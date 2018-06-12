@@ -69,7 +69,6 @@ class TawkToAccessControlHandler {
    */
   public function checkAccess() {
     $conditions = [];
-    $missingContext = FALSE;
     if (!empty($this->tawkToVisibility)) {
       foreach ($this->tawkToVisibility as $conditionId => $configuration) {
         $condition = $this->manager->createInstance($conditionId, $configuration);
