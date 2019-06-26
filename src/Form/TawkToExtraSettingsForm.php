@@ -96,6 +96,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
     $form_state->setTemporaryValue('gathered_contexts', $this->contextRepository->getAvailableContexts());
     $form['#tree'] = TRUE;
     $form['visibility'] = $this->buildVisibilityInterface([], $form_state);
+    $form['user'] = $this->buildUserInfoInterface([], $form_state);
     return parent::buildForm($form, $form_state);
   }
 
@@ -118,7 +119,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
     ];
     $visibility = $this->config('tawk_to.settings')->get('visibility');
     foreach ($this->manager->getDefinitionsForContexts($form_state->getTemporaryValue('gathered_contexts')) as $condition_id => $definition) {
-      // Don't display the ctools webform condition, causes problems.
+      // Don't display the webform condition, causes problems.
       if ($condition_id == 'entity_bundle:webform_submission') {
         continue;
       }
@@ -171,10 +172,63 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
   }
 
   /**
+   * Helper function for building the user info UI form.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The form array with the visibility UI added in.
+   */
+  protected function buildUserInfoInterface(array $form, FormStateInterface $form_state) {
+    $settings = $this->config('tawk_to.settings');
+    $form['user'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('User info settings'),
+    ];
+    $form['user']['show_user_name'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show user name in the widget'),
+      '#default_value' => $settings->get('show_user_name'),
+    ];
+    $form['user']['user_name'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('User name in the widget'),
+      '#description' => $this->t('You can use tokens. E.g. [current-user:name].'),
+      '#default_value' => $settings->get('user_name'),
+      '#states' => [
+        'visible' => [
+          ':input[name*=show_user_name]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    $form['user']['show_user_email'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show user email in the widget'),
+      '#default_value' => $settings->get('show_user_name'),
+    ];
+    $form['user']['user_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('User email in the widget'),
+      '#description' => $this->t('You can use tokens. E.g. [current-user:mail].'),
+      '#default_value' => $settings->get('user_email'),
+      '#states' => [
+        'visible' => [
+          ':input[name*=show_user_email]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    return $form;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->submitVisibility($form, $form_state);
+    $this->submitUserInfo($form, $form_state);
     return parent::submitForm($form, $form_state);
   }
 
@@ -202,6 +256,21 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
       $visibility[$condition_id] = $conditionConfiguration;
     }
     $this->config('tawk_to.settings')->set('visibility', $visibility)->save();
+  }
+
+  /**
+   * Helper function to independently submit the visibility UI.
+   *
+   * @param array $form
+   *   A nested array form elements comprising the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  protected function submitUserInfo(array $form, FormStateInterface $form_state) {
+    $visibility = [];
+    foreach ($form_state->getValue('user')['user'] as $key => $value) {
+      $this->config('tawk_to.settings')->set($key, $value)->save();
+    }
   }
 
   /**

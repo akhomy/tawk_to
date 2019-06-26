@@ -1,3 +1,7 @@
 tawk_to_widget_page_id: ""
 tawk_to_widget_id: ""
 visibility: {  }
+show_user_name: false
+user_name: '[current-user:name]'
+show_user_email: false
+user_email: '[current-user:mail]'

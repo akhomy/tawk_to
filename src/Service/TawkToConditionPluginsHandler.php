@@ -83,6 +83,7 @@ class TawkToConditionPluginsHandler {
    *   A set of conditions.
    */
   public function getConditions() {
+    $conditions = [];
     foreach ($this->tawkToVisibility as $conditionId => $configuration) {
       $condition = $this->manager->createInstance($conditionId, $configuration);
       if ($condition instanceof ContextAwarePluginInterface) {

@@ -7,4 +7,4 @@ services:
     arguments: ['@tawk_to.condition_plugins_handler']
   tawk_to.embed_render:
     class: Drupal\tawk_to\Service\TawkToEmbedRender
-    arguments: ['@config.factory', '@tawk_to.condition_plugins_handler', '@tawk_to.cache_manager']
+    arguments: ['@config.factory', '@token', '@tawk_to.condition_plugins_handler', '@tawk_to.cache_manager']
