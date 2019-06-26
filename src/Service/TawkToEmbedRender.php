@@ -3,6 +3,7 @@
 namespace Drupal\tawk_to\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\tawk_to\Cache\TawkToCacheManager;
 
 /**
  * Defines the rendering tawk.to service.
@@ -12,41 +13,51 @@ class TawkToEmbedRender {
   /**
    * The tawk.to embed URL.
    */
-  const TAWK_TO_EMBED_URL = 'https://embed.tawk.to';
+  const EMBED_URL = 'https://embed.tawk.to';
 
   /**
    * The widget page id.
    *
-   * @var array
+   * @var string
    */
-  protected $tawkToWidgetPageId;
+  protected $widgetPageId;
 
   /**
    * The widget id.
    *
-   * @var array
+   * @var string
    */
-  protected $tawkToWidgetId;
+  protected $widgetId;
+
+  /**
+   * The cache manager.
+   *
+   * @var \Drupal\tawk_to\Cache\TawkToCacheManager
+   */
+  protected $cacheManager;
 
   /**
    * The condition plugin defination.
    *
-   * @var array
+   * @var \Drupal\tawk_to\Service\TawkToConditionPluginsHandler
    */
-  protected $tawkToAccessControlHandler;
+  protected $conditionPluginsHandler;
 
   /**
    * Constructs the TawkToEmbedRender.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The factory for configuration objects.
-   * @param Drupal\tawk_to\Service\TawkToAccessControlHandler $tawkToAccessControlHandler
+   * @param Drupal\tawk_to\Service\TawkToConditionPluginsHandler $conditionPluginsHandler
    *   The tawk.to access controller handler.
+   * @param Drupal\tawk_to\Cache\TawkToCacheManager $cacheManager
+   *   The cache manager.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, TawkToAccessControlHandler $tawkToAccessControlHandler) {
-    $this->tawkToWidgetPageId = $configFactory->get('tawk_to.settings')->get('tawk_to_widget_page_id');
-    $this->tawkToWidgetId = $configFactory->get('tawk_to.settings')->get('tawk_to_widget_id');
-    $this->tawkToAccessControlHandler = $tawkToAccessControlHandler;
+  public function __construct(ConfigFactoryInterface $configFactory, TawkToConditionPluginsHandler $conditionPluginsHandler, TawkToCacheManager $cacheManager) {
+    $this->widgetPageId = $configFactory->get('tawk_to.settings')->get('tawk_to_widget_page_id');
+    $this->widgetId = $configFactory->get('tawk_to.settings')->get('tawk_to_widget_id');
+    $this->conditionPluginsHandler = $conditionPluginsHandler;
+    $this->cacheManager = $cacheManager;
   }
 
   /**
@@ -56,15 +67,22 @@ class TawkToEmbedRender {
    *   The render renderable array or NULL.
    */
   public function render() {
-    if ($this->tawkToWidgetPageId === '' || $this->tawkToWidgetId === '') {
+    if ($this->widgetPageId === '' || $this->widgetId === '') {
       return NULL;
     }
-    if ($this->tawkToAccessControlHandler->checkAccess()) {
-      $items = [];
-      $items['page_id'] = $this->tawkToWidgetPageId;
-      $items['embed_url'] = self::TAWK_TO_EMBED_URL;
-      $items['widget_id'] = $this->tawkToWidgetId;
-      return ['#theme' => 'tawk_to', '#items' => $items];
+    if ($this->conditionPluginsHandler->checkAccess()) {
+      return [
+        '#theme' => 'tawk_to',
+        '#items' => [
+          'page_id' => $this->widgetPageId,
+          'widget_id' => $this->widgetId,
+          'embed_url' => self::EMBED_URL,
+        ],
+        '#cache' => [
+          'contexts' => $this->cacheManager->getCacheContexts(),
+          'tags' => $this->cacheManager->getCacheTags(),
+        ],
+      ];
     }
     return NULL;
   }

@@ -1,7 +1,10 @@
 services:
-  tawk_to.access_control_handler:
-    class: Drupal\tawk_to\Service\TawkToAccessControlHandler
+  tawk_to.condition_plugins_handler:
+    class: Drupal\tawk_to\Service\TawkToConditionPluginsHandler
     arguments: ['@config.factory', '@context.handler', '@context.repository', '@plugin.manager.condition']
+  tawk_to.cache_manager:
+    class: Drupal\tawk_to\Cache\TawkToCacheManager
+    arguments: ['@tawk_to.condition_plugins_handler']
   tawk_to.embed_render:
     class: Drupal\tawk_to\Service\TawkToEmbedRender
-    arguments: ['@config.factory', '@tawk_to.access_control_handler']
+    arguments: ['@config.factory', '@tawk_to.condition_plugins_handler', '@tawk_to.cache_manager']

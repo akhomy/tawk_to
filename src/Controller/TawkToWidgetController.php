@@ -2,11 +2,11 @@
 
 namespace Drupal\tawk_to\Controller;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Controller routine that manages tawk.to widget settings.

@@ -4,16 +4,16 @@ namespace Drupal\tawk_to\Service;
 
 use Drupal\Component\Plugin\Exception\ContextException;
 use Drupal\Core\Condition\ConditionAccessResolverTrait;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Executable\ExecutableManagerInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
 use Drupal\Core\Plugin\ContextAwarePluginInterface;
-use Drupal\Core\Executable\ExecutableManagerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Defines the access control handler for the block entity type.
+ * Defines the condition plugins handler.
  */
-class TawkToAccessControlHandler {
+class TawkToConditionPluginsHandler {
 
   use ConditionAccessResolverTrait;
 
@@ -70,25 +70,36 @@ class TawkToAccessControlHandler {
   public function checkAccess() {
     $conditions = [];
     if (!empty($this->tawkToVisibility)) {
-      foreach ($this->tawkToVisibility as $conditionId => $configuration) {
-        $condition = $this->manager->createInstance($conditionId, $configuration);
-        if ($condition instanceof ContextAwarePluginInterface) {
-          try {
-            $contextMapping = $condition->getContextMapping();
-            if ($contextMapping) {
-              $contexts = $this->contextRepository->getRuntimeContexts(array_values($contextMapping));
-              $this->contextHandler->applyContextMapping($condition, $contexts);
-            }
-          }
-          catch (ContextException $e) {
-            // @todo: Think the best way to handle this.
-          }
-        }
-        $conditions[$conditionId] = $condition;
-      }
+      $conditions = $this->getConditions();
       return $this->resolveConditions($conditions, 'and');
     }
     return TRUE;
+  }
+
+  /**
+   * Gets condition plugins based on the module configuration.
+   *
+   * @return \Drupal\Core\Condition\ConditionInterface[]
+   *   A set of conditions.
+   */
+  public function getConditions() {
+    foreach ($this->tawkToVisibility as $conditionId => $configuration) {
+      $condition = $this->manager->createInstance($conditionId, $configuration);
+      if ($condition instanceof ContextAwarePluginInterface) {
+        try {
+          $contextMapping = $condition->getContextMapping();
+          if ($contextMapping) {
+            $contexts = $this->contextRepository->getRuntimeContexts(array_values($contextMapping));
+            $this->contextHandler->applyContextMapping($condition, $contexts);
+          }
+        }
+        catch (ContextException $e) {
+          // @todo: Think the best way to handle this.
+        }
+      }
+      $conditions[$conditionId] = $condition;
+    }
+    return $conditions;
   }
 
 }
