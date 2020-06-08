@@ -1,18 +1,19 @@
-<script type="text/javascript" src="{{ items.baseUrl|raw }}/public/js/jquery-1.11.0.min.js"></script>
+{% autoescape false %}
+<script type="text/javascript" src="{{ items.baseUrl }}/public/js/jquery-1.11.0.min.js"></script>
 
 <iframe id="tawkIframe" src="" style="min-height: 400px; width : 100%; border: none">
 </iframe>
 
 <script type="text/javascript">
   var currentHost = window.location.protocol + "//" + window.location.host;
-  var url = "{{ items.iframeUrl|raw }}&parentDomain=" + currentHost;
+  var url = "{{ items.iframeUrl }}&parentDomain=" + currentHost;
 
   jQuery("#tawkIframe").attr("src", url);
 
   var iframe = jQuery("#tawk_widget_customization")[0];
 
   window.addEventListener("message", function (e) {
-    if (e.origin === "{{ items.baseUrl|raw }}") {
+    if (e.origin === "{{ items.baseUrl }}") {
 
       if (e.data.action === "setWidget") {
         setWidget(e);
@@ -30,9 +31,9 @@
       widgetId: e.data.widgetId
     }, function (r) {
       if (r.success) {
-        e.source.postMessage({action: "setDone"}, "{{ items.baseUrl|raw }}");
+        e.source.postMessage({action: "setDone"}, "{{ items.baseUrl }}");
       } else {
-        e.source.postMessage({action: "setFail"}, "{{ items.baseUrl|raw }}");
+        e.source.postMessage({action: "setFail"}, "{{ items.baseUrl }}");
       }
     });
   }
@@ -40,10 +41,11 @@
   function removeWidget(e) {
     jQuery.post("{{ path('tawk_to.remove_widget') }}", function (r) {
       if (r.success) {
-        e.source.postMessage({action: "removeDone"}, "{{ items.baseUrl|raw }}");
+        e.source.postMessage({action: "removeDone"}, "{{ items.baseUrl }}");
       } else {
-        e.source.postMessage({action: "removeFail"}, "{{ items.baseUrl|raw }}");
+        e.source.postMessage({action: "removeFail"}, "{{ items.baseUrl }}");
       }
     });
   }
 </script>
+{% endautoescape %}

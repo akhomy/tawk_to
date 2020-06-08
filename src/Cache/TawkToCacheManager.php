@@ -3,6 +3,7 @@
 namespace Drupal\tawk_to\Cache;
 
 use Drupal\tawk_to\Service\TawkToConditionPluginsHandler;
+use Drupal\Core\Cache\CacheableDependencyInterface;
 
 /**
  * Defines the cache manager tawk.to service.

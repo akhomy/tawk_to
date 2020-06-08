@@ -96,10 +96,6 @@ class TawkToEmbedRender {
       return NULL;
     }
     if ($this->conditionPluginsHandler->checkAccess()) {
-      $userName = $userEmail = '';
-      if (TRUE) {
-        $userName = \Drupal::token()->replace($userName, [], ['clear' => TRUE]);
-      }
       return [
         '#theme' => 'tawk_to',
         '#items' => [
