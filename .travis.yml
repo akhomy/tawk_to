@@ -2,18 +2,22 @@
 # .travis.yml - Drupal 8 Travis CI Integration
 
 language: php
+dist: trusty
+sudo: required
+group: edge
 
-sudo: false
+services:
+  - mysql
 
 php:
-  - '7.1'
+  - '7.2'
   - '7.3'
 
 env:
   global:
-    - MODULE_NAME='tawk_to'
+    - MODULE_NAME='date_time_day'
     - DRUPAL_REPO='https://git.drupalcode.org/project/drupal.git'
-    - DRUPAL_VERSION='8.7.x'
+    - DRUPAL_VERSION='8.9.x'
     - DRUSH_VERSION='9.7.*'
 
 # Cache Composer & Drush directories.
@@ -36,7 +40,7 @@ before_install:
   # Composer.
   - sed -i '1i export PATH="$HOME/.composer/vendor/bin:$PATH"' $HOME/.bashrc
   - source $HOME/.bashrc
-  # - composer self-update
+  - composer self-update 1.9.0
 
   # Drush.
   - composer global require drush/drush:$DRUSH_VERSION
@@ -68,10 +72,10 @@ before_script:
   - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
   # Mysql might time out for long tests, increase the wait timeout.
-  - mysql -e 'SET @@GLOBAL.wait_timeout=1200'
+  - mysql -e "SET @@GLOBAL.wait_timeout=1200"
 
   # Install Drupal and enable the required modules (including this one).
-  - mysql -e 'create database drupal;'
+  - mysql -e "create database drupal;"
   - cd $TRAVIS_BUILD_DIR/drupal && drush --yes site-install standard --db-url="mysql://root@127.0.0.1/drupal"
 
   # Dependency Modules
@@ -97,7 +101,7 @@ script:
   # Drupal "SimpleTests" via run-tests.sh
   - cd $TRAVIS_BUILD_DIR/drupal
   - composer run-script drupal-phpunit-upgrade
-  # - php core/scripts/run-tests.sh --verbose --color --module $MODULE_NAME --php $(which php) --url http://127.0.0.1:8080
+  - php core/scripts/run-tests.sh --verbose --color --module $MODULE_NAME --php $(which php) --url http://127.0.0.1:8080
 
   # PHP Unit Tests
   # - cd $TRAVIS_BUILD_DIR/drupal
