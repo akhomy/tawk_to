@@ -15,7 +15,7 @@ php:
 
 env:
   global:
-    - MODULE_NAME='date_time_day'
+    - MODULE_NAME='tawk_to'
     - DRUPAL_REPO='https://git.drupalcode.org/project/drupal.git'
     - DRUPAL_VERSION='8.9.x'
     - DRUSH_VERSION='9.7.*'
