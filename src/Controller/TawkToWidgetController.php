@@ -4,6 +4,9 @@ namespace Drupal\tawk_to\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\language\ConfigurableLanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -40,18 +43,28 @@ class TawkToWidgetController extends ControllerBase {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   The configuration factory service.
    */
-  public function __construct(RequestStack $request, ConfigFactoryInterface $config) {
+  public function __construct(RequestStack $request, ConfigFactoryInterface $config, LanguageManagerInterface $languageManager) {
     $this->request = $request;
+    $this->languageManager = $languageManager;
+    $currentLanguage = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     $this->config = $config->getEditable('tawk_to.settings');
+    // Allows saving of the widget settings form multiple languages.
+    if ($this->languageManager instanceof ConfigurableLanguageManagerInterface) {
+      $configOverride = $this->languageManager
+        ->getLanguageConfigOverride($currentLanguage, 'tawk_to.settings');
+      if (!$configOverride->isNew()) {
+        $this->config = $configOverride;
+      }
+    }
   }
-
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-        $container->get('request_stack'),
-        $container->get('config.factory')
+      $container->get('request_stack'),
+      $container->get('config.factory'),
+      $container->get('language_manager')
     );
   }
 
