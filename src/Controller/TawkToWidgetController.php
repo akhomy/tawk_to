@@ -26,14 +26,21 @@ class TawkToWidgetController extends ControllerBase {
    *
    * @var \Symfony\Component\HttpFoundation\RequestStack
    */
-  public $request;
+  protected $request;
 
   /**
    * The settings config.
    *
    * @var \Drupal\Core\Config\Config
    */
-  public $config;
+  protected $config;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
 
   /**
    * Constructs a TawkToWidgetController object.
@@ -42,10 +49,12 @@ class TawkToWidgetController extends ControllerBase {
    *   The request stack.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   The configuration factory service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
-  public function __construct(RequestStack $request, ConfigFactoryInterface $config, LanguageManagerInterface $languageManager) {
+  public function __construct(RequestStack $request, ConfigFactoryInterface $config, LanguageManagerInterface $language_manager) {
     $this->request = $request;
-    $this->languageManager = $languageManager;
+    $this->languageManager = $language_manager;
     $currentLanguage = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     $this->config = $config->getEditable('tawk_to.settings');
     // Allows saving of the widget settings form multiple languages.
@@ -57,6 +66,7 @@ class TawkToWidgetController extends ControllerBase {
       }
     }
   }
+
   /**
    * {@inheritdoc}
    */
