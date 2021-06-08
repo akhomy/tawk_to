@@ -127,6 +127,10 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
       if ($condition_id == 'current_theme') {
         continue;
       }
+      // Don't display the GTM Language condition, causes problems.
+      if ($condition_id == 'gtag_language') {
+        continue;
+      }
       // Don't display the language condition until we have multiple languages.
       if ($condition_id == 'language' && !$this->language->isMultilingual()) {
         continue;
