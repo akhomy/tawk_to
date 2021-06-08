@@ -99,9 +99,9 @@ script:
   - $TRAVIS_BUILD_DIR/drupal/vendor/bin/phpcs --report=full --standard=$TRAVIS_BUILD_DIR/drupal/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --warning-severity=0 $TRAVIS_BUILD_DIR/drupal/modules/$MODULE_NAME --ignore=bin,*.css,gulpfile.js,libraries,modules/contrib,vendor
 
   # Drupal "SimpleTests" via run-tests.sh
-  - cd $TRAVIS_BUILD_DIR/drupal
-  - composer run-script drupal-phpunit-upgrade
-  - php core/scripts/run-tests.sh --verbose --color --module $MODULE_NAME --php $(which php) --url http://127.0.0.1:8080
+  # - cd $TRAVIS_BUILD_DIR/drupal
+  # - composer run-script drupal-phpunit-upgrade
+  # - php core/scripts/run-tests.sh --verbose --color --module $MODULE_NAME --php $(which php) --url http://127.0.0.1:8080
 
   # PHP Unit Tests
   # - cd $TRAVIS_BUILD_DIR/drupal
