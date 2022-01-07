@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\tawk_to\Form;
 
+use Drupal\Core\Condition\ConditionManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Executable\ExecutableManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
@@ -46,14 +48,14 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Executable\ExecutableManagerInterface $manager
+   * @param \Drupal\Core\Condition\ConditionManager $manager
    *   The ConditionManager for building the visibility UI.
    * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $contextRepository
    *   The lazy context repository service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language
    *   The language manager.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, ExecutableManagerInterface $manager, ContextRepositoryInterface $contextRepository, LanguageManagerInterface $language) {
+  public function __construct(ConfigFactoryInterface $configFactory, ConditionManager $manager, ContextRepositoryInterface $contextRepository, LanguageManagerInterface $language) {
     parent::__construct($configFactory);
     $this->manager = $manager;
     $this->contextRepository = $contextRepository;
@@ -63,7 +65,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
         $container->get('config.factory'),
         $container->get('plugin.manager.condition'),
@@ -111,7 +113,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    * @return array
    *   The form array with the visibility UI added in.
    */
-  protected function buildVisibilityInterface(array $form, FormStateInterface $form_state) {
+  protected function buildVisibilityInterface(array $form, FormStateInterface $form_state): array {
     $form['visibility_tabs'] = [
       '#type' => 'vertical_tabs',
       '#title' => $this->t('Visibility'),
@@ -186,7 +188,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    * @return array
    *   The form array with the visibility UI added in.
    */
-  protected function buildUserInfoInterface(array $form, FormStateInterface $form_state) {
+  protected function buildUserInfoInterface(array $form, FormStateInterface $form_state): array {
     $settings = $this->config('tawk_to.settings');
     $form['user'] = [
       '#type' => 'fieldset',
@@ -230,10 +232,10 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->submitVisibility($form, $form_state);
     $this->submitUserInfo($form, $form_state);
-    return parent::submitForm($form, $form_state);
+    parent::submitForm($form, $form_state);
   }
 
   /**
@@ -244,7 +246,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  protected function submitVisibility(array $form, FormStateInterface $form_state) {
+  protected function submitVisibility(array $form, FormStateInterface $form_state): void {
     $visibility = [];
     foreach ($form_state->getValue('visibility') as $condition_id => $values) {
       // Allow the condition to submit the form.
@@ -270,8 +272,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  protected function submitUserInfo(array $form, FormStateInterface $form_state) {
-    $visibility = [];
+  protected function submitUserInfo(array $form, FormStateInterface $form_state): void {
     foreach ($form_state->getValue('user')['user'] as $key => $value) {
       $this->config('tawk_to.settings')->set($key, $value)->save();
     }
@@ -280,7 +281,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     parent::validateForm($form, $form_state);
     $this->validateVisibility($form, $form_state);
   }
@@ -293,7 +294,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  protected function validateVisibility(array $form, FormStateInterface $form_state) {
+  protected function validateVisibility(array $form, FormStateInterface $form_state): void {
     // Validate visibility condition settings.
     foreach ($form_state->getValue('visibility') as $conditionId => $values) {
       // All condition plugins use 'negate' as a Boolean in their schema.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\tawk_to\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -31,7 +33,7 @@ class TawkToWidgetController extends ControllerBase {
   /**
    * The settings config.
    *
-   * @var \Drupal\Core\Config\Config
+   * @var \Drupal\Core\Config\StorableConfigBase
    */
   public $config;
 
@@ -50,7 +52,9 @@ class TawkToWidgetController extends ControllerBase {
     $this->config = $config->getEditable('tawk_to.settings');
     // Allows saving of the widget settings form multiple languages.
     if ($this->languageManager instanceof ConfigurableLanguageManagerInterface) {
-      $configOverride = $this->languageManager
+      /** @var \Drupal\language\ConfigurableLanguageManagerInterface $languageManager */
+      $languageManager = $this->languageManager;
+      $configOverride = $languageManager
         ->getLanguageConfigOverride($currentLanguage, 'tawk_to.settings');
       if (!$configOverride->isNew()) {
         $this->config = $configOverride;
@@ -60,7 +64,7 @@ class TawkToWidgetController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('request_stack'),
       $container->get('config.factory'),
@@ -74,7 +78,7 @@ class TawkToWidgetController extends ControllerBase {
    * @return string
    *   Base iframe URL.
    */
-  private function tawkToGetIframeUrl() {
+  private function tawkToGetIframeUrl(): string {
     $pageId = $this->config->get('tawk_to_widget_page_id');
     $widgetId = $this->config->get('tawk_to_widget_id');
     return self::TAWK_TO_PLUGINS_URL . '/generic/widgets?currentWidgetId=' . $widgetId . '&currentPageId=' . $pageId;
@@ -86,7 +90,7 @@ class TawkToWidgetController extends ControllerBase {
    * @return array
    *   Renderable array.
    */
-  public function widgetsContent() {
+  public function widgetsContent(): array {
     $items = [];
     $items['baseUrl'] = self::TAWK_TO_PLUGINS_URL;
     $items['iframeUrl'] = $this->tawkToGetIframeUrl();
@@ -99,7 +103,7 @@ class TawkToWidgetController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   JSON object for JS code.
    */
-  public function setWidget() {
+  public function setWidget(): JsonResponse {
     $pageId = $this->request->getCurrentRequest()->get('pageId');
     $widgetId = $this->request->getCurrentRequest()->get('widgetId');
 
@@ -122,7 +126,7 @@ class TawkToWidgetController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   JSON object for JS code.
    */
-  public function removeWidget() {
+  public function removeWidget(): JsonResponse {
     $this->config->clear('tawk_to_widget_page_id')->save();
     $this->config->clear('tawk_to_widget_id')->save();
     return new JsonResponse(['success' => TRUE]);

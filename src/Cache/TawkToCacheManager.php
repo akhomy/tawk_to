@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\tawk_to\Cache;
 
 use Drupal\tawk_to\Service\TawkToConditionPluginsHandler;
@@ -20,7 +22,7 @@ class TawkToCacheManager {
   /**
    * Constructs the TawkToCacheManager.
    *
-   * @param Drupal\tawk_to\Service\TawkToConditionPluginsHandler $conditionsPluginsHandler
+   * @param \Drupal\tawk_to\Service\TawkToConditionPluginsHandler $conditionsPluginsHandler
    *   The tawk.to access controller handler.
    */
   public function __construct(TawkToConditionPluginsHandler $conditionsPluginsHandler) {
@@ -33,7 +35,7 @@ class TawkToCacheManager {
    * @return array
    *   The cache tags.
    */
-  public function getCacheTags() {
+  public function getCacheTags(): array {
     $tags = ['config:tawk_to.settings'];
     $conditions = $this->conditionsPluginsHandler->getConditions();
     foreach ($conditions as $condition) {
@@ -50,7 +52,7 @@ class TawkToCacheManager {
    * @return array
    *   The cache tags.
    */
-  public function getCacheContexts() {
+  public function getCacheContexts(): array {
     $contexts = ['session'];
     $conditions = $this->conditionsPluginsHandler->getConditions();
     foreach ($conditions as $condition) {

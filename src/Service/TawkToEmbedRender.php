@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\tawk_to\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -65,9 +67,9 @@ class TawkToEmbedRender {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
-   * @param Drupal\tawk_to\Service\TawkToConditionPluginsHandler $conditionPluginsHandler
+   * @param \Drupal\tawk_to\Service\TawkToConditionPluginsHandler $conditionPluginsHandler
    *   The tawk.to access controller handler.
-   * @param Drupal\tawk_to\Cache\TawkToCacheManager $cacheManager
+   * @param \Drupal\tawk_to\Cache\TawkToCacheManager $cacheManager
    *   The cache manager.
    */
   public function __construct(ConfigFactoryInterface $configFactory, Token $token, TawkToConditionPluginsHandler $conditionPluginsHandler, TawkToCacheManager $cacheManager) {
@@ -91,7 +93,7 @@ class TawkToEmbedRender {
    * @return array|null
    *   The render renderable array or NULL.
    */
-  public function render() {
+  public function render(): ?array {
     if ($this->widgetPageId === '' || $this->widgetId === '') {
       return NULL;
     }

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\tawk_to\Service;
 
 use Drupal\Component\Plugin\Exception\ContextException;
 use Drupal\Core\Condition\ConditionAccessResolverTrait;
+use Drupal\Core\Condition\ConditionManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Executable\ExecutableManagerInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
@@ -54,10 +57,10 @@ class TawkToConditionPluginsHandler {
    *   The ContextHandler for applying contexts to conditions properly.
    * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $contextRepository
    *   The lazy context repository service.
-   * @param \Drupal\Core\Executable\ExecutableManagerInterface $manager
+   * @param \Drupal\Core\Condition\ConditionManager $manager
    *   The ConditionManager for building the visibility UI.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, ContextHandlerInterface $contextHandler, ContextRepositoryInterface $contextRepository, ExecutableManagerInterface $manager) {
+  public function __construct(ConfigFactoryInterface $configFactory, ContextHandlerInterface $contextHandler, ContextRepositoryInterface $contextRepository, ConditionManager $manager) {
     $this->tawkToVisibility = $configFactory->get('tawk_to.settings')->get('visibility');
     $this->contextHandler = $contextHandler;
     $this->contextRepository = $contextRepository;
@@ -65,9 +68,12 @@ class TawkToConditionPluginsHandler {
   }
 
   /**
-   * {@inheritdoc}
+   * Checks conditions access to the widget.
+   *
+   * @return bool
+   *   TRUE if access to widget allowed, FALSE otherwise.
    */
-  public function checkAccess() {
+  public function checkAccess(): bool {
     $conditions = [];
     if (!empty($this->tawkToVisibility)) {
       $conditions = $this->getConditions();
@@ -82,7 +88,7 @@ class TawkToConditionPluginsHandler {
    * @return \Drupal\Core\Condition\ConditionInterface[]
    *   A set of conditions.
    */
-  public function getConditions() {
+  public function getConditions(): array {
     $conditions = [];
     foreach ($this->tawkToVisibility as $conditionId => $configuration) {
       $condition = $this->manager->createInstance($conditionId, $configuration);
@@ -95,7 +101,7 @@ class TawkToConditionPluginsHandler {
           }
         }
         catch (ContextException $e) {
-          // @todo: Think the best way to handle this.
+          // @todo Think about a better way to handle this.
         }
       }
       $conditions[$conditionId] = $condition;

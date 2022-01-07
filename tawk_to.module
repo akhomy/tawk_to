@@ -5,19 +5,23 @@
  * Contains main module code.
  */
 
+declare (strict_types = 1);
+
 /**
  * Implements hook_help().
  *
  * @see hook_help()
  */
-function tawk_to_help($route_name) {
+function tawk_to_help(string $route_name): string {
   switch ($route_name) {
     case 'help.page.tawk_to':
-      return t('
-        <h2><a href="http://tawk.to">Tawk.to</a> widget for Drupal 8.</h2>
+      $info = t('
+        <h2><a href="http://tawk.to">Tawk.to</a> widget for Drupal.</h2>
         <p>Tawk.to widget cutomization, using this module you can select widget which will be used on specific site pages.</p>
       ');
+      return (string) $info;
   }
+  return '';
 }
 
 /**
@@ -27,14 +31,14 @@ function tawk_to_help($route_name) {
  *
  * @see hook_page_bottom()
  */
-function tawk_to_page_bottom(array &$page_bottom) {
+function tawk_to_page_bottom(array &$page_bottom): void {
   $page_bottom['tawk_to_widget'] = \Drupal::service('tawk_to.embed_render')->render();
 }
 
 /**
  * Implements hook_theme().
  */
-function tawk_to_theme() {
+function tawk_to_theme(): array {
   return [
     'tawk_to' => [
       'variables' => [

@@ -1,4 +1,4 @@
-name: Tawk.to - Live Chat Application (Drupal 8)
+name: Tawk.to - Live Chat Application
 type: module
 description: 'Provides base intergraton with tawk.to service.'
 core: 8.x
