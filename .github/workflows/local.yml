@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.0']
+        php-versions: ['7.4']
         drupal-core: ['9.2.x']
     steps:
       - name: Checkout Drupal core
@@ -49,6 +49,7 @@ jobs:
       - name: Install Drupal core dependencies
         run: |
           composer config allow-plugins true -n
+          composer update --lock
           composer install --no-progress --no-interaction --prefer-dist --optimize-autoloader
           composer --no-interaction run-script drupal-phpunit-upgrade
 
