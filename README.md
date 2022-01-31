@@ -1,3 +1,5 @@
+[![Tests](https://github.com/akhomy/tawk_to/actions/workflows/testing.yml/badge.svg)](https://github.com/akhomy/tawk_to/actions/workflows/testing.yml)
+
 CONTENTS OF THIS FILE
 ---------------------
 
