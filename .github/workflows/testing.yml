@@ -106,7 +106,6 @@ jobs:
 
       - name: Run PHPStan
         run: |
-          cp modules/contrib/tawk_to/phpstan.neon ./
           ./vendor/bin/phpstan analyse modules/contrib/tawk_to
 
       - name: Run PHPCS
