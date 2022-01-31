@@ -106,7 +106,7 @@ jobs:
 
       - name: Run PHPStan
         run: |
-          ./vendor/bin/phpstan analyse modules/contrib/tawk_to
+          cd modules/contrib/tawk_to && ../../../vendor/bin/phpstan analyse
 
       - name: Run PHPCS
         run: |
