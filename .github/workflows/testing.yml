@@ -82,7 +82,8 @@ jobs:
           mglaman/phpstan-drupal:^0.12.8 \
           phpstan/phpstan-deprecation-rules:^0.12.2 \
           jangregor/phpstan-prophecy:^0.8 \
-          phpstan/phpstan-phpunit:^0.12
+          phpstan/phpstan-phpunit:^0.12 \
+          drush/drush:^10
 
       # We install Coder separately because updating did not work in the local
       # Drupal vendor dir.
