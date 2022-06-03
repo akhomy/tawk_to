@@ -81,7 +81,7 @@ jobs:
       - name: Install tawk_to module
         run: |
           composer config repositories.tawk_to vcs https://github.com/akhomy/tawk_to
-          composer require drupal/tawk_to:3.0.x
+          composer require drupal/tawk_to:3.0.x-dev
 
       - name: Run PHPStan
         run: |
