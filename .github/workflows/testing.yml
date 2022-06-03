@@ -105,6 +105,13 @@ jobs:
           composer config repositories.tawk_to vcs https://github.com/akhomy/tawk_to
           composer require drupal/tawk_to:3.0.x
 
+      - name: Run PHPUnit
+        run: |
+          php -S localhost:8888 >& /dev/null &
+          vendor/bin/drush si minimal --db-url=sqlite://sites/default/files/db.sqlite --yes
+          cp modules/contrib/tawk_to/phpunit.xml.dist core/phpunit.xml
+          ./vendor/bin/phpunit --configuration core/phpunit.xml modules/contrib/tawk_to
+
       - name: Run PHPStan
         run: |
           cd modules/contrib/tawk_to && ../../../vendor/bin/phpstan analyse
