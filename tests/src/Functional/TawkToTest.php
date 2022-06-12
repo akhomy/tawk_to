@@ -43,6 +43,8 @@ class TawkToTest extends BrowserTestBase {
 
     // Configures tawk_to.
     $this->config('tawk_to.settings')
+      ->set('tawk_to_widget_page_id', 'TEST_WIDGET_PAGE_ID')
+      ->set('tawk_to_widget_id', 'TEST_WIDGET_ID')
       ->set('visibility', [
         'request_path' => [
           'id' => 'request_path',
@@ -80,6 +82,15 @@ class TawkToTest extends BrowserTestBase {
     $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
     $this->assertSession()->statusCodeEquals(200);
+  }
+
+  /**
+   * Tests the widget is rendered as configured on the front page.
+   */
+  public function testTawkToWidgetRenrederOnTheFrontPage(): void {
+    $this->drupalGet('<front>');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseContains('TEST_WIDGET_PAGE_ID');
   }
 
 }
