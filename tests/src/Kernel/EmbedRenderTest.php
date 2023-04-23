@@ -49,19 +49,15 @@ class EmbedRenderTest extends KernelTestBase {
    * Tests the form is showing configuration updates.
    */
   public function testEmbedRenderPageBottom(): void {
-    $html_renderer = \Drupal::getContainer()->get('main_content_renderer.html');
-
-    $page = [];
-    // Build page top and bottom in order to trigger tawk_to hook_page_bottom().
-    $html_renderer->buildPageTopAndBottom($page);
+    // Simulate tawk_to_page_bottom().
+    $render = \Drupal::service('tawk_to.embed_render')->render();
 
     // Checks if the tawk.to widget is rendered as expected from configuration.
-    $widget_render = $page['page_bottom']['tawk_to_widget']['#items'];
+    $widget_render = $render['#items'];
     $this->assertEquals('TEST_WIDGET_PAGE_ID', $widget_render['page_id']);
     $this->assertEquals('TEST_WIDGET_ID', $widget_render['widget_id']);
     $this->assertEquals('test', $widget_render['user_name']);
     $this->assertEquals('test@example.com', $widget_render['user_email']);
-
   }
 
 }
