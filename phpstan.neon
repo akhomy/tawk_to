@@ -18,20 +18,3 @@ parameters:
   ignoreErrors:
     # new static() is a best practice in Drupal, so we cannot fix that.
     - "#^Unsafe usage of new static\\(\\)\\.$#"
-    # Drupal allows object property access to custom fields, so we cannot fix
-    # that.
-    - "#^Access to an undefined property Drupal\\\\#"
-    - "#^Property Drupal\\\\.+ \\(Drupal\\\\Core\\\\Field\\\\FieldItemListInterface\\) does not accept .+\\.$#"
-    # Drupal coding standards want "object" instead of "stdClass" in doc
-    # comments.
-    - "#^PHPDoc tag .+ with type object is not subtype of native type stdClass\\.$#"
-    - "#^Parameter \\#1 \\$event of method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) expects object, string given\\.$#"
-    # Drupal core documentation bugs that should be fixed in Drupal core.
-    - "#^Parameter \\#1 \\$label of method Drupal\\\\Core\\\\TypedData\\\\DataDefinition\\:\\:setLabel\\(\\) expects string, Drupal\\\\Core\\\\StringTranslation\\\\TranslatableMarkup given\\.$#"
-    - "#^Parameter \\#2 \\$value of method Drupal\\\\Core\\\\Database\\\\Query\\\\Delete\\:\\:condition\\(\\) expects array\\|Drupal\\\\Core\\\\Database\\\\Query\\\\SelectInterface\\|string\\|null#"
-    - "#^Parameter \\#2 \\$value of method Drupal\\\\Core\\\\Database\\\\Query\\\\ConditionInterface\\:\\:condition\\(\\) expects array\\|Drupal\\\\Core\\\\Database\\\\Query\\\\SelectInterface\\|string\\|null#"
-    - "#^Parameter \\#2 \\$message of method Drupal\\\\Core\\\\Form\\\\FormStateInterface\\:\\:setError\\(\\) expects string, Drupal\\\\Core\\\\StringTranslation\\\\TranslatableMarkup given\\.$#"
-    - "#^Parameter \\#1 \\$description of method Drupal\\\\Core\\\\TypedData\\\\DataDefinition\\:\\:setDescription\\(\\) expects string, Drupal\\\\Core\\\\StringTranslation\\\\TranslatableMarkup given\\.$#"
-    - "#^Parameter \\#2 \\$message of method Drupal\\\\Core\\\\Form\\\\FormStateInterface\\:\\:setErrorByName\\(\\) expects string, Drupal\\\\Core\\\\StringTranslation\\\\TranslatableMarkup given\\.$#"
-    - "#^Parameter \\#1 \\$values of method Drupal\\\\Core\\\\Field\\\\FieldItemBase\\:\\:setValue\\(\\) expects array\\|null#"
-
