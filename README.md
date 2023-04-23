@@ -1,3 +1,5 @@
+[![Tests](https://github.com/akhomy/tawk_to/actions/workflows/testing.yml/badge.svg)](https://github.com/akhomy/tawk_to/actions/workflows/testing.yml)
+
 # Tawk.to - Live Chat Application
 
 Implementation of tawk.to live chat for Drupal.
