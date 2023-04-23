@@ -32,7 +32,13 @@ function tawk_to_help(string $route_name): string {
  * @see hook_page_bottom()
  */
 function tawk_to_page_bottom(array &$page_bottom): void {
-  $page_bottom['tawk_to_widget'] = \Drupal::service('tawk_to.embed_render')->render();
+  $page_bottom['tawk_to_widget'] = [
+    '#lazy_builder' => [
+      'tawk_to.embed_render:render',
+      [],
+    ],
+    '#create_placeholder' => TRUE,
+  ];
 }
 
 /**

@@ -5,13 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\tawk_to\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\tawk_to\Cache\TawkToCacheManager;
 use Drupal\Core\Utility\Token;
 
 /**
  * Defines the rendering tawk.to service.
  */
-class TawkToEmbedRender {
+class TawkToEmbedRender implements TrustedCallbackInterface {
 
   /**
    * The tawk.to embed URL.
@@ -114,6 +115,13 @@ class TawkToEmbedRender {
       ];
     }
     return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['render'];
   }
 
 }

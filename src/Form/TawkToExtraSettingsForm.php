@@ -98,7 +98,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
     $form_state->setTemporaryValue('gathered_contexts', $this->contextRepository->getAvailableContexts());
     $form['#tree'] = TRUE;
     $form['visibility'] = $this->buildVisibilityInterface([], $form_state);
-    $form['user'] = $this->buildUserInfoInterface([], $form_state);
+    $form['user'] = $this->buildUserInfoInterface([]);
     return parent::buildForm($form, $form_state);
   }
 
@@ -182,14 +182,13 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    *
    * @param array $form
    *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
    *
    * @return array
    *   The form array with the visibility UI added in.
    */
-  protected function buildUserInfoInterface(array $form, FormStateInterface $form_state): array {
+  protected function buildUserInfoInterface(array $form): array {
     $settings = $this->config('tawk_to.settings');
+
     $form['user'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('User info settings'),
@@ -234,7 +233,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->submitVisibility($form, $form_state);
-    $this->submitUserInfo($form, $form_state);
+    $this->submitUserInfo($form_state);
     parent::submitForm($form, $form_state);
   }
 
@@ -265,14 +264,12 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
   }
 
   /**
-   * Helper function to independently submit the visibility UI.
+   * Helper function to independently submit the user info UI.
    *
-   * @param array $form
-   *   A nested array form elements comprising the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  protected function submitUserInfo(array $form, FormStateInterface $form_state): void {
+  protected function submitUserInfo(FormStateInterface $form_state): void {
     foreach ($form_state->getValue('user')['user'] as $key => $value) {
       $this->config('tawk_to.settings')->set($key, $value)->save();
     }

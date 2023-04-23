@@ -53,7 +53,7 @@ class TawkToCacheManager {
    *   The cache tags.
    */
   public function getCacheContexts(): array {
-    $contexts = ['session'];
+    $contexts = ['session', 'user'];
     $conditions = $this->conditionsPluginsHandler->getConditions();
     foreach ($conditions as $condition) {
       if ($condition instanceof CacheableDependencyInterface) {
