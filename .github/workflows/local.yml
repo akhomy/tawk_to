@@ -16,6 +16,7 @@ jobs:
         php-versions: ['7.3', '7.4']
         drupal-core: ['9.5.x']
         phpstan: ['0']
+        drush: ['^10']
     steps:
       - name: Checkout Drupal core
         uses: actions/checkout@v2.4.0
@@ -63,6 +64,7 @@ jobs:
           jangregor/phpstan-prophecy:^1.0.0 \
           phpstan/phpstan-phpunit:^1.0.0 \
           phpstan/extension-installer:^1.0
+          drush/drush:${{ matrix.drush }}
 
       # We install Coder separately because updating did not work in the local
       # Drupal vendor dir.
