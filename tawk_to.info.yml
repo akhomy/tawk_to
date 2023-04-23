@@ -1,6 +1,5 @@
 name: Tawk.to - Live Chat Application
 type: module
-description: 'Provides base intergraton with tawk.to service.'
-core: 8.x
-core_version_requirement: ^8 || ^9
+description: 'Provides base integration with tawk.to service.'
+core_version_requirement: ^8 || ^9 || ^10
 configure: tawk_to.index
