@@ -138,7 +138,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
         continue;
       }
       /** @var \Drupal\Core\Condition\ConditionInterface $condition */
-      $condition = $this->manager->createInstance($condition_id, isset($visibility[$condition_id]) ? $visibility[$condition_id] : []);
+      $condition = $this->manager->createInstance($condition_id, $visibility[$condition_id] ?? []);
       $form_state->set(['conditions', $condition_id], $condition);
       $condition_form = $condition->buildConfigurationForm([], $form_state);
       $condition_form['#type'] = 'details';
@@ -252,7 +252,7 @@ class TawkToExtraSettingsForm extends ConfigFormBase {
       $condition = $form_state->get(['conditions', $condition_id]);
       $condition->submitConfigurationForm($form['visibility'][$condition_id], SubformState::createForSubform($form['visibility'][$condition_id], $form, $form_state));
       if ($condition instanceof ContextAwarePluginInterface) {
-        $contextMapping = isset($values['context_mapping']) ? $values['context_mapping'] : [];
+        $contextMapping = $values['context_mapping'] ?? [];
         $condition->setContextMapping($contextMapping);
       }
 
