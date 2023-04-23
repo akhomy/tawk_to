@@ -10,15 +10,15 @@ services:
   - mysql
 
 php:
-  - '7.2'
-  - '7.3'
+  - '7.4'
+  - '8.0'
 
 env:
   global:
     - MODULE_NAME='date_time_day'
     - DRUPAL_REPO='https://git.drupalcode.org/project/drupal.git'
-    - DRUPAL_VERSION='8.9.x'
-    - DRUSH_VERSION='9.7.*'
+    - DRUPAL_VERSION='9.5.x'
+    - DRUSH_VERSION='10.1.*'
 
 # Cache Composer & Drush directories.
 cache:

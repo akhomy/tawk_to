@@ -1,8 +1,3 @@
-includes:
-  - ../../../vendor/mglaman/phpstan-drupal/extension.neon
-  - ../../../vendor/phpstan/phpstan-deprecation-rules/rules.neon
-  - ../../../vendor/jangregor/phpstan-prophecy/extension.neon
-  - ../../../vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
   # PHPStan cannot find files in this test directory automatically.
   scanDirectories:
@@ -16,9 +11,6 @@ parameters:
     - install
     - module
     - php
-  # We test with PHPStan on Drupal 8 and 9 and might have different ignored
-  # errors on both.
-  reportUnmatchedIgnoredErrors: false
   # Many Drupal classes are iterable where we cannot specify a value type.
   checkMissingIterableValueType: false
   # PHPCS doesn't seem to be able to handle generics, so have to ignore those.
