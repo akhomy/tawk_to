@@ -89,14 +89,14 @@ class TawkToEmbedRender implements TrustedCallbackInterface {
   }
 
   /**
-   * Checks acess to the current requests and return renderable array or NULL.
+   * Checks acess to the current requests and return renderable/empty array.
    *
-   * @return array|null
-   *   The render renderable array or NULL.
+   * @return array
+   *   The render renderable array.
    */
   public function render(): ?array {
     if ($this->widgetPageId === '' || $this->widgetId === '') {
-      return NULL;
+      return [];
     }
     if ($this->conditionPluginsHandler->checkAccess()) {
       return [
@@ -114,13 +114,13 @@ class TawkToEmbedRender implements TrustedCallbackInterface {
         ],
       ];
     }
-    return NULL;
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function trustedCallbacks() {
+  public static function trustedCallbacks(): array {
     return ['render'];
   }
 
